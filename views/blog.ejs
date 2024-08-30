@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        <%= blog.title %>
+    </title>
+    <%- include('./partials/head') %>
+        <style>
+            /* Custom styling for the blog display page */
+            
+            .card-title {
+                font-size: 2.5rem;
+                font-weight: 700;
+            }
+            
+            .text-muted {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .text-muted img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+            
+            .card-body {
+                padding: 2rem;
+            }
+            
+            .card-img-top {
+                max-height: 500px;
+                object-fit: cover;
+            }
+            
+            hr {
+                margin: 2rem 0;
+            }
+        </style>
+</head>
+
+<body>
+    <%- include('./partials/nav') %>
+
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="card shadow-lg">
+                        <img src="<%= blog.coverImage %>" class="card-img-top" alt="<%= blog.title %>" />
+                        <div class="card-body">
+                            <h1 class="card-title">
+                                <%= blog.title %>
+                            </h1>
+                            <p class="text-muted">
+                                <img src="<%= blog.createdBy.userAvatar %>" alt="<%= blog.createdBy.fullname %>" />
+                                <%= blog.createdBy.fullname %> |
+                                    <%=
+                blog.createdAt.toDateString() %>
+                            </p>
+                            <hr />
+                            <p class="card-text">
+                                <%= blog.body %>
+                            </p>
+                        </div>
+                        <div class="container mt-3">
+                            <h1>Comment
+                                <%= (comments.length) %>
+                            </h1>
+                            <% if (locals.user) { %>
+
+                                <form action="/blog/comment/<%= blog._id %>" method="POST" class="d-flex">
+                                    <div class="form-group flex-grow-1 me-2">
+                                        <label for="comment" class="form-label visually-hidden">Add your comment</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="comment"
+                    name="content"
+                    placeholder="Write a comment..."
+                  />
+                  <button type="submit" class="btn btn-primary mt-3">
+                    Add Comment
+                  </button>
+                </div>
+              </form>
+              <% } %>
+            </div>
+            <div class="mt-4">
+              <% comments.forEach(comment => { %>
+              <div class="d-flex align-items-start mb-3">
+                <img
+                  src="<%= comment.createdBy.userAvatar %>"
+                  alt="<%= comment.createdBy.fullname %>"
+                  class="rounded-circle me-3"
+                  style="width: 40px; height: 40px; object-fit: cover"
+                />
+                <div>
+                  <p class="mb-1 text-uppercase fw-bold">
+                    <%= comment.createdBy.fullname %>
+                  </p>
+                  <pre class="mb-0" style="white-space: pre-wrap">
+<%= comment.content %></pre
+                  >
+                </div>
+              </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('./partials/script') %>
+  </body>
+</html>
